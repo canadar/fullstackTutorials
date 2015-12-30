@@ -23,6 +23,8 @@ class webserverHandler(BaseHTTPRequestHandler):
 				output += "<html><body>"
 				for item in restaurants:
 					output += "<h1>%s</h1><br />" %item.name
+					output += '''<a href="">Edit</a><br />'''
+					output += '''<a href="">Delete</a><br />'''
 			#insert from to add new data
 				
 				output += "</body></html>"
