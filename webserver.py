@@ -25,6 +25,7 @@ class webserverHandler(BaseHTTPRequestHandler):
 			#insert from to add new data
 				
 				output += "</body></html>"
+				self.wfile.write(output)
 				print output
 				return
 				
