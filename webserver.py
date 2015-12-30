@@ -7,21 +7,22 @@ import cgi
 class webserverHandler(BaseHTTPRequestHandler):
 	def do_GET(self):
 		try:
-			if self.path.endswith("/menus"):
+			if self.path.endswith("/restaurants"):
 				self.send_response(200)
 				self.send_header('Content-type', 'text/html')
 				self.end_headers()
+				
 			#connect to the database and bind the metadata
-				self.engine = create_engine('sqlite:///restaurantmenu.db')
-				Base.metadata.bind = self.engine
-				self.DBSession = sessionmaker(bind=engine)
+				engine = create_engine('sqlite:///restaurantmenu.db')
+				Base.metadata.bind = engine
+				DBSession = sessionmaker(bind=engine)
 			#assign the session and pull all restaurants from the database, store collection.
-				self.session = self.DBSession
-				self.restaurants = session.query(Restaurant).all()
+				session = DBSession()
+				restaurants = session.query(Restaurant).all()
 				output = ""
 				output += "<html><body>"
-				for item in self.restaurants:
-					output += "<h1>%s</h1><br />" % item.name
+				for item in restaurants:
+					output += "<h1>%s</h1><br />" %item.name
 			#insert from to add new data
 				
 				output += "</body></html>"
