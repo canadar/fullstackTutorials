@@ -8,6 +8,9 @@ class webserverHandler(BaseHTTPRequestHandler):
 	def do_GET(self):
 		try:
 			if self.path.endswith("/menus"):
+				self.send_response(200)
+				self.send_header('Content-type', 'text/html')
+				self.end_headers()
 			#connect to the database and bind the metadata
 				self.engine = create_engine('sqlite:///restaurantmenu.db')
 				Base.metadata.bind = self.engine
@@ -19,9 +22,11 @@ class webserverHandler(BaseHTTPRequestHandler):
 				output += "<html><body>"
 				for item in self.restaurants:
 					output += "<h1>%s</h1><br />" % item.name
-				#insert from to add new data
+			#insert from to add new data
 				
 				output += "</body></html>"
+				print output
+				return
 				
 			if self.path.endswith("/hello"):
 				self.send_response(200)
