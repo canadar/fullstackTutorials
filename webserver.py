@@ -4,29 +4,44 @@ from sqlalchemy.orm import sessionmaker
 from database_setup import Restaurant, Base, MenuItem
 import cgi
 
+#connect to the database and bind the metadata
+engine = create_engine('sqlite:///restaurantmenu.db')
+Base.metadata.bind = engine
+DBSession = sessionmaker(bind=engine)
+#assign the session and pull all restaurants from the database, store collection.
+session = DBSession()
+
 class webserverHandler(BaseHTTPRequestHandler):
 	def do_GET(self):
 		try:
+			if self.path.endswith("/restaurants/new"):
+				self.send_response(200)
+				self.send_header('Content-type', 'text/html')
+				self.end_headers()
+				output = ""
+				output += "<html><body>"
+				#Create form to enter a new restaurant.
+				output += "<h2>Enter a new restaurant!</h2>"
+				output += "</body></html>"
+				self.wfile.write(output)
+				print output
+				return
+				
 			if self.path.endswith("/restaurants"):
 				self.send_response(200)
 				self.send_header('Content-type', 'text/html')
 				self.end_headers()
 				
-			#connect to the database and bind the metadata
-				engine = create_engine('sqlite:///restaurantmenu.db')
-				Base.metadata.bind = engine
-				DBSession = sessionmaker(bind=engine)
-			#assign the session and pull all restaurants from the database, store collection.
-				session = DBSession()
 				restaurants = session.query(Restaurant).all()
 				output = ""
 				output += "<html><body>"
+				output += "<h2>Enter a new restaurant "
+				output += '''<a href="/restaurant/new">Here!</a><br />'''
+				output += "</h2>"
 				for item in restaurants:
 					output += "<h1>%s</h1><br />" %item.name
 					output += '''<a href="">Edit</a><br />'''
-					output += '''<a href="">Delete</a><br />'''
-			#insert from to add new data
-				
+					output += '''<a href="">Delete</a><br />'''				
 				output += "</body></html>"
 				self.wfile.write(output)
 				print output
